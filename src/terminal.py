@@ -1,5 +1,6 @@
 from recognize_character import recognize_characters
 from segment_characters import segment_characters
+from segment_words import segment_words
 
 from skimage import io
 from skimage.color import rgb2gray
@@ -14,5 +15,7 @@ if __name__ == '__main__':
     threshold = threshold_otsu(image)
     image = image < threshold
 
-    characters = recognize_characters(segment_characters(image))
-    print(characters)
+    words = segment_words(image)
+    for word in words:
+        characters = segment_characters(word)
+        print(recognize_characters(characters))

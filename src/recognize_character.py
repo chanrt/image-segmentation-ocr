@@ -57,7 +57,7 @@ def recognize_characters(characters):
 
         standard_padding = 3
         required_size = 28 - 2 * standard_padding
-        character = resize(character, (required_size, required_size), anti_aliasing=True)
+        character = resize(character, (required_size, required_size))
         character = pad_character(character, standard_padding)
 
         input_vector = transpose(character).reshape(-1, 784)
