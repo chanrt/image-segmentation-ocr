@@ -16,7 +16,8 @@ def get_character(label, mapping):
             return chr(item[1])
 
 
-def loop():
+def interactive():
+    """ Allows the user to draw a character on a canvas and have it recognized by the neural network """
     folder_path = os.path.dirname(__file__)
     model = load_model(os.path.join(folder_path, 'model'))
     mapping = load(open(os.path.join(folder_path, 'mapping.pkl'), 'rb'))
@@ -80,4 +81,4 @@ def loop():
 
 
 if __name__ == '__main__':
-    loop()
+    interactive()
