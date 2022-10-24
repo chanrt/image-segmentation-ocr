@@ -1,6 +1,4 @@
-from copy import copy
 from matplotlib import pyplot as plt
-from multiprocessing import Pool
 from numba import njit
 from numpy import argmax, c_, r_, transpose, zeros
 from pickle import load
@@ -73,7 +71,12 @@ def recognize_characters(characters, debug=False):
     print("\nPreparing characters ...")
     prepared_characters = [prepare_character(character) for character in tqdm(characters)]
 
-    print("\nPrediction ...")
+    # space_locations = [i for i, character in enumerate(prepared_characters) if str(character) == ' ']
+    # newline_locations = [i for i, character in enumerate(prepared_characters) if str(character) == '\n']
+    # inputs = list([transpose(character).reshape(-1, 784) for character in prepared_characters if str(character) != ' ' and str(character) != '\n'])
+    # predictions = model.predict(inputs, outputs=len(inputs))
+
+    print("\nPredicting ...")
     predictions = []
     num = 0
     for prepared_character in tqdm(prepared_characters):
