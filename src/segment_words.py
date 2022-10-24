@@ -33,14 +33,11 @@ def get_space_around(histogram, i):
 
 def segment_words(image):
     """ Takes a binarized image of a line and segments it into words """
-    num_rows, num_cols = image.shape
+    _, num_cols = image.shape
     vertical_histogram = zeros(num_cols, dtype=int)
 
     for col in range(num_cols):
         vertical_histogram[col] = sum(image[:, col])
-
-    plt.plot(vertical_histogram)
-    plt.show()
 
     spaces = []
     in_space = False
@@ -58,7 +55,7 @@ def segment_words(image):
             in_space = False
             spaces.append(current_space_length)
 
-    clusters, centroids = cluster(spaces, 2)
+    _, centroids = cluster(spaces, 2)
 
     words = []
     word_start, word_end = -1, -1

@@ -25,9 +25,6 @@ def segment_characters(image):
     """ Takes a binarized image of a word and segments it into characters """
     labelled_image = label(image, background=0)
 
-    plt.imshow(labelled_image)
-    plt.show()
-
     num_features = labelled_image.max()
     segments = []
 

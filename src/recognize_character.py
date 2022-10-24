@@ -34,34 +34,37 @@ def recognize_characters(characters):
     predictions = []
 
     for character in characters:
-        num_rows, num_cols = character.shape
-
-        if num_rows > num_cols:
-            num_either_side = (num_rows - num_cols) // 2
-            padding_column = zeros((num_rows, 1))
-
-            for _ in range(num_either_side):
-                character = c_[padding_column, character]
-
-            for _ in range(num_either_side):
-                character = c_[character, padding_column]
+        if character == " " or character == "\n":
+            predictions.append(character)
         else:
-            num_either_side = (num_cols - num_rows) // 2
-            padding_row = zeros((1, num_cols))
+            num_rows, num_cols = character.shape
 
-            for _ in range(num_either_side):
-                character = r_[padding_row, character]
+            if num_rows > num_cols:
+                num_either_side = (num_rows - num_cols) // 2
+                padding_column = zeros((num_rows, 1))
 
-            for _ in range(num_either_side):
-                character = r_[character, padding_row]
+                for _ in range(num_either_side):
+                    character = c_[padding_column, character]
 
-        standard_padding = 3
-        required_size = 28 - 2 * standard_padding
-        character = resize(character, (required_size, required_size))
-        character = pad_character(character, standard_padding)
+                for _ in range(num_either_side):
+                    character = c_[character, padding_column]
+            else:
+                num_either_side = (num_cols - num_rows) // 2
+                padding_row = zeros((1, num_cols))
 
-        input_vector = transpose(character).reshape(-1, 784)
-        prediction = get_character(argmax(model.predict(input_vector, verbose=0)), mapping)
-        predictions.append(prediction)
+                for _ in range(num_either_side):
+                    character = r_[padding_row, character]
+
+                for _ in range(num_either_side):
+                    character = r_[character, padding_row]
+
+            standard_padding = 3
+            required_size = 28 - 2 * standard_padding
+            character = resize(character, (required_size, required_size))
+            character = pad_character(character, standard_padding)
+
+            input_vector = transpose(character).reshape(-1, 784)
+            prediction = get_character(argmax(model.predict(input_vector, verbose=0)), mapping)
+            predictions.append(prediction)
 
     return predictions

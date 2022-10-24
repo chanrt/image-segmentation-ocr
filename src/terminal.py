@@ -1,5 +1,6 @@
 from recognize_character import recognize_characters
 from segment_characters import segment_characters
+from segment_lines import segment_lines
 from segment_words import segment_words
 
 from skimage import io
@@ -15,7 +16,16 @@ if __name__ == '__main__':
     threshold = threshold_otsu(image)
     image = image < threshold
 
-    words = segment_words(image)
-    for word in words:
-        characters = segment_characters(word)
-        print(recognize_characters(characters))
+    characters = []
+
+    lines = segment_lines(image)
+    for line in lines:
+        words = segment_words(line)
+        for word in words:
+            characters.extend(segment_characters(word))
+            characters.append(" ")
+        characters.append("\n")
+
+    predictions = recognize_characters(characters)
+    string = ("".join(predictions)).lower()
+    print(string)
