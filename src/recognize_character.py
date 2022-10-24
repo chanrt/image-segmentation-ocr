@@ -34,7 +34,7 @@ def recognize_characters(characters):
     predictions = []
 
     for character in characters:
-        if character == " " or character == "\n":
+        if str(character) == ' ' or str(character) == '\n':
             predictions.append(character)
         else:
             num_rows, num_cols = character.shape

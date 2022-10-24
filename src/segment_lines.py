@@ -35,7 +35,7 @@ def segment_lines(image):
 
 if __name__ == '__main__':
     folder_path = path.dirname(__file__)
-    image = rgb2gray(io.imread(path.join(folder_path, 'image.png')))
+    image = rgb2gray(io.imread(path.join(folder_path, 'inputs', 'para_written.png')))
     threshold = threshold_otsu(image)
     image = image < threshold
     lines = segment_lines(image)

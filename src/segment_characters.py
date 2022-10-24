@@ -1,5 +1,9 @@
 from matplotlib import pyplot as plt
+from skimage import io
+from skimage.color import rgb2gray
+from skimage.filters import threshold_otsu
 from skimage.measure import label
+from os import path
 
 
 def get_bounding_rect(labelled_image, label):
@@ -41,3 +45,16 @@ def segment_characters(image):
     segments = [segment['image'] for segment in segments]
 
     return segments
+
+
+if __name__ == '__main__':
+    folder_path = path.dirname(__file__)
+    image = rgb2gray(io.imread(path.join(folder_path, 'inputs', 'word_written.png')))
+    threshold = threshold_otsu(image)
+    image = image < threshold
+    characterss = segment_characters(image)
+
+    for i, characters in enumerate(characterss):
+        plt.subplot(1, len(characterss), i + 1)
+        plt.imshow(characters)
+    plt.show()
