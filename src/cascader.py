@@ -27,7 +27,12 @@ def cascade(image, debug_segmentation=False, debug_recognition=False):
 
     predictions = recognize_characters(characters, debug_recognition)
     string = ("".join(predictions)).lower()
+
+    print("Neural network prediction:")
+    print(string)
+
     string = post_processing(string)
+    print("After post processing:")
     print(string)
 
 

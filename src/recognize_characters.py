@@ -66,15 +66,10 @@ def recognize_characters(characters, debug=False):
     """ Takes a binary image containing a single character, resizes it, and passes it to the neural network for recognition """
     folder_path = os.path.dirname(__file__)
     model = load_model(os.path.join(folder_path, 'model'))
-    mapping = load(open(os.path.join(folder_path, 'mapping.pkl'), 'rb'))
+    mapping = load(open(os.path.join(folder_path, 'data', 'mapping.pkl'), 'rb'))
 
     print("\nPreparing characters ...")
     prepared_characters = [prepare_character(character) for character in tqdm(characters)]
-
-    # space_locations = [i for i, character in enumerate(prepared_characters) if str(character) == ' ']
-    # newline_locations = [i for i, character in enumerate(prepared_characters) if str(character) == '\n']
-    # inputs = list([transpose(character).reshape(-1, 784) for character in prepared_characters if str(character) != ' ' and str(character) != '\n'])
-    # predictions = model.predict(inputs, outputs=len(inputs))
 
     print("\nPredicting ...")
     predictions = []
