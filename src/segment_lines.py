@@ -7,7 +7,7 @@ from skimage.filters import threshold_otsu
 from os import path
 
 
-def segment_lines(image):
+def segment_lines(image, debug=False):
     num_rows, _ = image.shape
     horizontal_histogram = zeros(num_rows, dtype=int)
 
@@ -29,6 +29,13 @@ def segment_lines(image):
 
     if line_start != -1:
         lines.append(image[line_start:line_end + 1, :])
+
+    if debug:
+        for i, line in enumerate(lines):
+            plt.subplot(len(lines), 1, i + 1)
+            plt.imshow(line, cmap='gray')
+        plt.axis('off')
+        plt.show()
 
     return lines
 

@@ -30,7 +30,7 @@ def get_space_around(histogram, i):
             return space
 
 
-def segment_words(image):
+def segment_words(image, debug=False):
     """ Takes a binarized image of a line and segments it into words """
     _, num_cols = image.shape
     vertical_histogram = zeros(num_cols, dtype=int)
@@ -79,6 +79,13 @@ def segment_words(image):
 
     if word_start != -1:
         words.append(image[:, word_start:end + 1])
+
+    if debug:
+        for i, word in enumerate(words):
+            plt.subplot(1, len(words), i + 1)
+            plt.imshow(word, cmap='gray')
+        plt.axis('off')
+        plt.show()
 
     return words
 

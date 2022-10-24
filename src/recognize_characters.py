@@ -64,7 +64,7 @@ def prepare_character(character):
         return character
 
 
-def recognize_characters(characters):
+def recognize_characters(characters, debug=False):
     """ Takes a binary image containing a single character, resizes it, and passes it to the neural network for recognition """
     folder_path = os.path.dirname(__file__)
     model = load_model(os.path.join(folder_path, 'model'))
@@ -75,6 +75,7 @@ def recognize_characters(characters):
 
     print("\nPrediction ...")
     predictions = []
+    num = 0
     for prepared_character in tqdm(prepared_characters):
         if isinstance(prepared_character, str):
             predictions.append(prepared_character)
@@ -82,5 +83,11 @@ def recognize_characters(characters):
             input_vector = transpose(prepared_character).reshape(-1, 784)
             prediction = get_character(argmax(model.predict(input_vector, verbose=0)), mapping)
             predictions.append(prediction)
+
+            if debug:
+                plt.title(prediction)
+                plt.imshow(prepared_character)
+                plt.savefig(os.path.join(folder_path, 'debug_outputs', f'character_{num}.png'))
+                num += 1
 
     return predictions

@@ -25,7 +25,7 @@ def get_bounding_rect(labelled_image, label):
     return top_row, bottom_row, left_col, right_col
 
 
-def segment_characters(image):
+def segment_characters(image, debug=False):
     """ Takes a binarized image of a word and segments it into characters """
     labelled_image = label(image, background=0)
 
@@ -43,6 +43,13 @@ def segment_characters(image):
 
     segments = sorted(segments, key=lambda segment: segment['x'])
     segments = [segment['image'] for segment in segments]
+
+    if debug:
+        for i, segment in enumerate(segments):
+            plt.subplot(1, len(segments), i + 1)
+            plt.imshow(segment, cmap='gray')
+        plt.axis('off')
+        plt.show()
 
     return segments
 
