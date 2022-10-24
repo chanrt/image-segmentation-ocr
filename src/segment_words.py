@@ -1,7 +1,6 @@
 from kmeans1d import cluster
 from matplotlib import pyplot as plt
 from numpy import zeros
-
 from skimage import io
 from skimage.color import rgb2gray
 from skimage.filters import threshold_otsu
