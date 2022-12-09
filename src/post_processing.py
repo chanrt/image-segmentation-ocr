@@ -49,18 +49,6 @@ def apply_spelling_correction(word, english_words):
         return apply_extra_correction(word, english_words)
 
 
-def apply_extra_correction(word, english_words):
-    length = len(word)
-    prospective_words = []
-
-    for i in range(length):
-        prospective_word = word[:i] + word[i + 1:]
-        if prospective_word in english_words:
-            prospective_words.append(prospective_word)
-
-    return prospective_words
-
-
 def post_processor(string, predictions, number_correction=True, english_correction=False):
     """ Accepts a string and corrects common mistakes """
     folder_path = path.dirname(__file__)

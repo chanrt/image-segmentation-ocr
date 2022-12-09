@@ -98,16 +98,3 @@ def segment_characters(image, debug=False):
         plt.show()
 
     return segments
-
-
-if __name__ == '__main__':
-    folder_path = path.dirname(__file__)
-    image = rgb2gray(io.imread(path.join(folder_path, 'inputs', 'word_written.png')))
-    threshold = threshold_otsu(image)
-    image = image < threshold
-    characterss = segment_characters(image)
-
-    for i, characters in enumerate(characterss):
-        plt.subplot(1, len(characterss), i + 1)
-        plt.imshow(characters)
-    plt.show()
