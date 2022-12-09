@@ -18,5 +18,9 @@ class Settings:
         # required only if the writing is very thick
         self.skeletonize = False
 
+        # dilation of character processed image, before it is passed to neural network
+        # required only if the writing is very thin and the characters have been eroded
+        self.dilate = True
+
 
 settings = Settings()

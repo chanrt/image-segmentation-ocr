@@ -51,6 +51,9 @@ def segment_words(image, debug=False):
             in_space = False
             spaces.append(current_space_length)
 
+    if len(spaces) == 0:
+        return []
+
     # cluster spaces into two groups, one corresponding to word space, and other to character space
     _, centroids = cluster(spaces, 2)
 

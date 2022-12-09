@@ -8,7 +8,7 @@ from post_processing import post_processor
 if __name__ == "__main__":
     print("Program started")
 
-    processed_image = image_preprocessor('para_text.png')
+    processed_image = image_preprocessor('gonzalez_pdf.png')
     raw_characters = image_segmenter(processed_image, debug=False)
     processed_characters = character_preprocessor(raw_characters)
     recognized_characters, details = character_recognizer(processed_characters, debug=False)

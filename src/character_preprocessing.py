@@ -1,4 +1,5 @@
 from numpy import c_, r_, zeros
+from skimage.morphology import dilation, skeletonize
 from skimage.transform import resize
 from tqdm import tqdm
 
@@ -55,6 +56,8 @@ def character_preprocessor(characters):
             character = resize(character, (required_size, required_size))
             character = pad_character(character, standard_padding)
 
+            if settings.dilate:
+                character = dilation(character)
             if settings.skeletonize:
                 character = skeletonize(character)
             
