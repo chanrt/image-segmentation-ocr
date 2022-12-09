@@ -1,10 +1,9 @@
 from matplotlib import pyplot as plt
 from numpy import sum, zeros
-from skimage import io
-from skimage.color import rgb2gray
-from skimage.filters import threshold_otsu
 from skimage.measure import label
 from os import path
+
+from settings import settings
 
 
 def get_bounding_rows(vertical_histogram):
@@ -67,14 +66,16 @@ def segment_characters(image, debug=False):
         top_row, bottom_row, left_col, right_col = get_bounding_rect(labelled_image, i)
         width, height = right_col - left_col, bottom_row - top_row
 
-        if height / abs(top_line - bottom_line) < 0.5:
+        if height / abs(top_line - bottom_line) < settings.ignore_character_height_ratio:
             continue
         
         # check for tittle above the rect
         tittle_segment = image[top_line:top_row, left_col:right_col]
-        if sum(tittle_segment) > 5:
+        if sum(tittle_segment) > settings.min_tittle_pixels:
+            # extend top limit to include tittle
             top_limit = top_line
         else:
+            # ignore
             top_limit = top_row
         bottom_limit = bottom_row
 

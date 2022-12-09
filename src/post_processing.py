@@ -46,7 +46,7 @@ def apply_spelling_correction(word, english_words):
     if 0 < min_error < 2:
         return prospective_words
     else:
-        return apply_extra_correction(word, english_words)
+        return word
 
 
 def post_processor(string, predictions, number_correction=True, english_correction=False):

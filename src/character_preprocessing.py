@@ -2,6 +2,8 @@ from numpy import c_, r_, zeros
 from skimage.transform import resize
 from tqdm import tqdm
 
+from settings import settings
+
 
 def pad_character(character, padding):
     padding_row = zeros((padding, character.shape[1]))
@@ -48,10 +50,13 @@ def character_preprocessor(characters):
                     character = r_[character, padding_row]
 
             # add padding to square image
-            standard_padding = 4
+            standard_padding = settings.padding
             required_size = 28 - 2 * standard_padding
             character = resize(character, (required_size, required_size))
             character = pad_character(character, standard_padding)
+
+            if settings.skeletonize:
+                character = skeletonize(character)
             
             processed_characters.append(character)
 
