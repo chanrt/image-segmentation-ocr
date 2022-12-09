@@ -114,22 +114,24 @@ def recognize_characters(characters, debug=False):
     prepared_characters = [prepare_character(character) for character in tqdm(characters)]
 
     print("\nPredicting characters ...\n")
-    punctuations = []
+    special_chars = []
     actual_characters = []
 
     for i, prepared_character in enumerate(prepared_characters):
         if isinstance(prepared_character, str):
-            punctuations.append({'index': i, 'character': prepared_character})
+            special_chars.append({'index': i, 'character': prepared_character})
         else:
             actual_characters.append(transpose(prepared_character))
 
     predictions = [0 for _ in characters]
 
-    for punctuation in punctuations:
-        predictions[punctuation['index']] = punctuation['character']
+    # add spaces and lines
+    for special_char in special_chars:
+        predictions[special_char['index']] = special_char['character']
 
     actual_characters = array(actual_characters)
     model_predictions = model.predict(actual_characters, verbose=0)
+    most_probable_characters = []
 
     index = 0
     for i in range(len(predictions)):
@@ -137,18 +139,19 @@ def recognize_characters(characters, debug=False):
             most_prob_alpha, most_prob_num, alpha_prob, num_prob = get_most_probable_chars(model_predictions[index], mapping)
             predictions[i] = {'alpha': most_prob_alpha, 'alpha prob': alpha_prob, 'num': most_prob_num, 'num prob': num_prob}
             index += 1
-            print(predictions[i])
 
-            # predictions[i] = get_character(argmax(model_predictions[index]), mapping)
-            # index += 1
+            if alpha_prob > num_prob:
+                most_probable_characters.append(most_prob_alpha)
+            else:
+                most_probable_characters.append(most_prob_num)
 
-    # if debug:
-    #     print("Generating debug data ...")
-    #     num = 0
-    #     for actual_character in tqdm(actual_characters):
-    #         plt.title(f"Predictions: {model_predicted_characters[num]}")
-    #         plt.imshow(transpose(actual_character))
-    #         plt.savefig(os.path.join(folder_path, 'debug_outputs', f'character_{num}.png'))
-    #         num += 1
+    if debug:
+        print("Generating debug data ...")
+        num = 0
+        for actual_character in tqdm(actual_characters):
+            plt.title(f"Prediction: {most_probable_characters[num]}")
+            plt.imshow(transpose(actual_character))
+            plt.savefig(os.path.join(folder_path, 'debug_outputs', f'character_{num}.png'))
+            num += 1
 
     return predictions

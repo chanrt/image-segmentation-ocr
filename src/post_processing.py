@@ -17,21 +17,6 @@ def apply_number_correction(word, predictions):
     corrected_word = ""
                 
     for i, letter in enumerate(word):
-        # if letter == '0':
-        #     corrected_word += 'o'
-        # elif letter == '1':
-        #     corrected_word += 'l'
-        # elif letter == '2':
-        #     corrected_word += 'z'
-        # elif letter == '5':
-        #     corrected_word += 's'
-        # elif letter == '6':
-        #     corrected_word += 'b'
-        # elif letter == '9':
-        #     corrected_word += 'g'
-        # else:
-        #     corrected_word += letter
-
         if letter.isdigit():
             corrected_word += predictions[i]['alpha']
         else:
@@ -58,14 +43,10 @@ def apply_spelling_correction(word, english_words):
             elif error == min_error:
                 prospective_words.append(english_word)
 
-    if length < 5 and min_error < 2:
-        return prospective_words
-    elif length < 8 and min_error < 3:
-        return prospective_words
-    elif length < 10 and min_error < 4:
+    if 0 < min_error < 2:
         return prospective_words
     else:
-        return word
+        return apply_extra_correction(word, english_words)
 
 
 def apply_extra_correction(word, english_words):
@@ -80,7 +61,7 @@ def apply_extra_correction(word, english_words):
     return prospective_words
 
 
-def post_processing(string, predictions, number_correction=True, english_correction=False):
+def post_processor(string, predictions, number_correction=True, english_correction=False):
     """ Accepts a string and corrects common mistakes """
     folder_path = path.dirname(__file__)
     english_words = open(path.join(folder_path, 'data', 'english_words.txt'), 'r').read().split('\n')
@@ -128,6 +109,6 @@ def post_processing(string, predictions, number_correction=True, english_correct
 
             index += len(word)
 
-    corrected_words = "".join(corrected_words)
+    string = "".join(corrected_words)
 
-    return corrected_words
+    return string.lower()
