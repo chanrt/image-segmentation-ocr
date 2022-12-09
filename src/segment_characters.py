@@ -67,13 +67,12 @@ def segment_characters(image, debug=False):
         top_row, bottom_row, left_col, right_col = get_bounding_rect(labelled_image, i)
         width, height = right_col - left_col, bottom_row - top_row
 
-        if abs(width - height) / max(width, height) < 0.1 and sum(segmented_region) > 0.8 * (bottom_row - top_row + 1) * (right_col - left_col + 1):
-            # period (will be ignored) or a tittle (considered later)
+        if height / abs(top_line - bottom_line) < 0.5:
             continue
         
         # check for tittle above the rect
         tittle_segment = image[top_line:top_row, left_col:right_col]
-        if sum(tittle_segment) > 9:
+        if sum(tittle_segment) > 5:
             top_limit = top_line
         else:
             top_limit = top_row

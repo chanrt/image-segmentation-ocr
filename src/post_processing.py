@@ -13,22 +13,27 @@ def get_stats(word):
     return num_letters, num_numbers
 
 
-def apply_number_correction(word):
+def apply_number_correction(word, predictions):
     corrected_word = ""
                 
-    for letter in word:
-        if letter == '0':
-            corrected_word += 'o'
-        elif letter == '1':
-            corrected_word += 'l'
-        elif letter == '2':
-            corrected_word += 'z'
-        elif letter == '5':
-            corrected_word += 's'
-        elif letter == '6':
-            corrected_word += 'b'
-        elif letter == '9':
-            corrected_word += 'g'
+    for i, letter in enumerate(word):
+        # if letter == '0':
+        #     corrected_word += 'o'
+        # elif letter == '1':
+        #     corrected_word += 'l'
+        # elif letter == '2':
+        #     corrected_word += 'z'
+        # elif letter == '5':
+        #     corrected_word += 's'
+        # elif letter == '6':
+        #     corrected_word += 'b'
+        # elif letter == '9':
+        #     corrected_word += 'g'
+        # else:
+        #     corrected_word += letter
+
+        if letter.isdigit():
+            corrected_word += predictions[i]['alpha']
         else:
             corrected_word += letter
 
@@ -75,7 +80,7 @@ def apply_extra_correction(word, english_words):
     return prospective_words
 
 
-def post_processing(string, number_correction=True, english_correction=False):
+def post_processing(string, predictions, number_correction=True, english_correction=False):
     """ Accepts a string and corrects common mistakes """
     folder_path = path.dirname(__file__)
     english_words = open(path.join(folder_path, 'data', 'english_words.txt'), 'r').read().split('\n')
@@ -85,6 +90,7 @@ def post_processing(string, number_correction=True, english_correction=False):
     words = []
     word = ""
 
+    # break string into words
     for i in range(length):
         if string[i] != ' ' and string[i] != '\n':
             if word == "":
@@ -98,14 +104,16 @@ def post_processing(string, number_correction=True, english_correction=False):
 
     corrected_words = []
 
+    index = 0
     for word in words:
         if word == ' ' or word == '\n':
             corrected_words.append(word)
+            index += 1
         else:
             num_letters, num_numbers = get_stats(word)
 
-            if number_correction and (num_numbers > 0 and num_letters > 1):
-                corrected_word = apply_number_correction(word)
+            if number_correction and (num_numbers > 0 and num_letters > 0):
+                corrected_word = apply_number_correction(word, predictions[index: index + len(word)])
             else:
                 corrected_word = word[:]
             
@@ -113,18 +121,12 @@ def post_processing(string, number_correction=True, english_correction=False):
                 if corrected_word in english_words:
                     corrected_words.append(corrected_word)
                 else:
-                    spell_corrected_words = apply_spelling_correction(corrected_word, english_words)
-                    extra_corrected_words = apply_extra_correction(corrected_word, english_words)
-
-                    corrections = []
-                    if len(spell_corrected_words) > 0:
-                        corrections.extend(spell_corrected_words)
-                    if len(extra_corrected_words) > 0:
-                        corrections.extend(extra_corrected_words)
-
+                    corrections = apply_spelling_correction(corrected_word, english_words)
                     corrected_words.append("/".join(corrections))
             else:
                 corrected_words.append(corrected_word)
+
+            index += len(word)
 
     corrected_words = "".join(corrected_words)
 

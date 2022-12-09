@@ -1,8 +1,9 @@
 from matplotlib import pyplot as plt
 from numba import njit
-from numpy import argmax, c_, r_, transpose, zeros
+from numpy import array, argmax, c_, r_, transpose, zeros
 from pickle import load
 from skimage.transform import resize
+from skimage.morphology import skeletonize
 from tqdm import tqdm
 
 import os
@@ -12,11 +13,51 @@ from tensorflow import keras
 from keras.models import load_model
 
 
-@njit
 def get_character(label, mapping):
     for item in mapping:
         if item[0] == label:
             return chr(item[1])
+
+
+def get_most_probable_chars(predictions, mapping):
+    most_prob_alpha, most_prob_num = "", ""
+    alpha_prob, num_prob = 0, 0
+
+    highest_prob_label = argmax(predictions)
+    char = get_character(highest_prob_label, mapping)
+
+    if char.isdigit():
+        most_prob_num = char
+        num_prob = predictions[highest_prob_label]
+
+        while True:
+            predictions[highest_prob_label] = 0
+            highest_prob_label = argmax(predictions)
+            char = get_character(highest_prob_label, mapping)
+
+            if char.isdigit():
+                continue
+            else:
+                most_prob_alpha = char
+                alpha_prob = predictions[highest_prob_label]
+                break
+    else:
+        most_prob_alpha = char
+        alpha_prob = predictions[highest_prob_label]
+        
+        while True:
+            predictions[highest_prob_label] = 0
+            highest_prob_label = argmax(predictions)
+            char = get_character(highest_prob_label, mapping)
+
+            if char.isdigit():
+                most_prob_num = char
+                num_prob = predictions[highest_prob_label]
+                break
+            else:
+                continue
+        
+    return most_prob_alpha, most_prob_num, alpha_prob, num_prob
 
 
 def pad_character(character, padding):
@@ -54,10 +95,11 @@ def prepare_character(character):
             for _ in range(num_either_side):
                 character = r_[character, padding_row]
 
-        standard_padding = 3
+        standard_padding = 4
         required_size = 28 - 2 * standard_padding
         character = resize(character, (required_size, required_size))
         character = pad_character(character, standard_padding)
+        # character = skeletonize(character)
         
         return character
 
@@ -71,21 +113,42 @@ def recognize_characters(characters, debug=False):
     print("\nPreparing characters ...")
     prepared_characters = [prepare_character(character) for character in tqdm(characters)]
 
-    print("\nPredicting ...")
-    predictions = []
-    num = 0
-    for prepared_character in tqdm(prepared_characters):
-        if isinstance(prepared_character, str):
-            predictions.append(prepared_character)
-        else:
-            input_vector = transpose(prepared_character).reshape(-1, 784)
-            prediction = get_character(argmax(model.predict(input_vector, verbose=0)), mapping)
-            predictions.append(prediction)
+    print("\nPredicting characters ...\n")
+    punctuations = []
+    actual_characters = []
 
-            if debug:
-                plt.title(prediction)
-                plt.imshow(prepared_character)
-                plt.savefig(os.path.join(folder_path, 'debug_outputs', f'character_{num}.png'))
-                num += 1
+    for i, prepared_character in enumerate(prepared_characters):
+        if isinstance(prepared_character, str):
+            punctuations.append({'index': i, 'character': prepared_character})
+        else:
+            actual_characters.append(transpose(prepared_character))
+
+    predictions = [0 for _ in characters]
+
+    for punctuation in punctuations:
+        predictions[punctuation['index']] = punctuation['character']
+
+    actual_characters = array(actual_characters)
+    model_predictions = model.predict(actual_characters, verbose=0)
+
+    index = 0
+    for i in range(len(predictions)):
+        if predictions[i] == 0:
+            most_prob_alpha, most_prob_num, alpha_prob, num_prob = get_most_probable_chars(model_predictions[index], mapping)
+            predictions[i] = {'alpha': most_prob_alpha, 'alpha prob': alpha_prob, 'num': most_prob_num, 'num prob': num_prob}
+            index += 1
+            print(predictions[i])
+
+            # predictions[i] = get_character(argmax(model_predictions[index]), mapping)
+            # index += 1
+
+    # if debug:
+    #     print("Generating debug data ...")
+    #     num = 0
+    #     for actual_character in tqdm(actual_characters):
+    #         plt.title(f"Predictions: {model_predicted_characters[num]}")
+    #         plt.imshow(transpose(actual_character))
+    #         plt.savefig(os.path.join(folder_path, 'debug_outputs', f'character_{num}.png'))
+    #         num += 1
 
     return predictions

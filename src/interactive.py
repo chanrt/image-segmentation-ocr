@@ -20,7 +20,7 @@ def interactive():
     """ Allows the user to draw a character on a canvas and have it recognized by the neural network """
     folder_path = os.path.dirname(__file__)
     model = load_model(os.path.join(folder_path, 'model'))
-    mapping = load(open(os.path.join(folder_path, 'mapping.pkl'), 'rb'))
+    mapping = load(open(os.path.join(folder_path, 'data', 'mapping.pkl'), 'rb'))
 
     pg.init()
     screen = pg.display.set_mode((800, 600))
@@ -57,7 +57,7 @@ def interactive():
             if 0 <= x < 28 and 0 <= y < 28:
                 grid[y][x] = 1
 
-            nn_input = transpose(dilation(array(grid))).reshape(-1, 784)
+            nn_input = transpose(dilation(array(grid))).reshape(-1, 28, 28, 1)
             prediction = model.predict(nn_input, verbose=0)
             character = get_character(prediction.argmax(), mapping)
             text = big_font.render(character, True, (255, 255, 255)) 
