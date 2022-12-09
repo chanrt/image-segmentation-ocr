@@ -2,6 +2,10 @@
 
 class Settings:
     def __init__(self):
+        # adaptive thresholding parameters
+        self.threshold_block_size = 51
+        self.threshold_offset = 0.1
+
         # the range (-theta, theta) across which skew correction is performed (in degrees)
         self.skew_correction_range = 90
 
@@ -21,15 +25,15 @@ class Settings:
         self.padding = 4
 
         # skeletonization of character processed image, beofre it is passed to neural network
-        # required only if the writing is very thick
-        self.skeletonize = True
+        # required only if the writing is very thick, or thickness is uneven
+        self.skeletonize = False
 
         # dilation of character processed image, before it is passed to neural network
         # required only if the writing is very thin and the characters have been eroded
         self.dilate = False
 
         # minimum length of word for which autocorrected can be applied
-        self.min_word_length_autocorrect = 4
+        self.min_word_length_autocorrect = 3
 
         # maximum ratio of erraneous characters to total characters in a word for which autocorrect can be applied
         self.max_error_ratio = 0.8

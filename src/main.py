@@ -8,7 +8,10 @@ from post_processing import post_processor
 def main(image_name):
     print("Program started")
 
-    processed_image = image_preprocessor(image_name, skew_correction=True)
+    # preprocess the image before segmenting it
+    # skew_correction = True will try to correct the skew of the image
+    # debug = True will show the result at intermediate steps
+    processed_image = image_preprocessor(image_name, skew_correction=False, debug=True)
 
     # segment the image into lines, words and characters
     # debug = True will show all the intermediate segmentation steps
@@ -24,7 +27,7 @@ def main(image_name):
     # run post processing on the recognized characters
     # number_correction = True will try to replace each number with the most probable character
     # english_correction = True will try to correct words that are not in the English dictionary
-    final_output = post_processor(recognized_characters, details, number_correction=True, english_correction=False)
+    final_output = post_processor(recognized_characters, details, number_correction=True, english_correction=True)
 
     print(f"\nFinal output:\n{final_output}")
 
@@ -32,4 +35,4 @@ def main(image_name):
 
 
 if __name__ == '__main__':
-    main('para_text_rotated.png')
+    main('polya_description.jpg')

@@ -53,6 +53,9 @@ def segment_characters(image, debug=False):
 
     top_line, bottom_line = get_bounding_rows(vertical_histogram)
 
+    if top_line == bottom_line:
+        return []
+
     labelled_image = label(image, background=0)
 
     num_features = labelled_image.max()
