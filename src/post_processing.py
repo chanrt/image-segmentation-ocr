@@ -1,4 +1,7 @@
 from os import path
+from tqdm import tqdm
+
+from settings import settings
 
 
 def get_stats(word):
@@ -43,7 +46,7 @@ def apply_spelling_correction(word, english_words):
             elif error == min_error:
                 prospective_words.append(english_word)
 
-    if 0 < min_error < 2:
+    if min_error / length < settings.max_error_ratio and len(prospective_words) <= settings.max_autocorrected_words:
         return prospective_words
     else:
         return word
@@ -73,8 +76,9 @@ def post_processor(string, predictions, number_correction=True, english_correcti
 
     corrected_words = []
 
+    print("\nCarrying out post processing ...")
     index = 0
-    for word in words:
+    for word in tqdm(words):
         if word == ' ' or word == '\n':
             corrected_words.append(word)
             index += 1
@@ -86,12 +90,16 @@ def post_processor(string, predictions, number_correction=True, english_correcti
             else:
                 corrected_word = word[:]
             
-            if english_correction:
+            if english_correction and len(word) >= settings.min_word_length_autocorrect:
                 if corrected_word in english_words:
                     corrected_words.append(corrected_word)
                 else:
                     corrections = apply_spelling_correction(corrected_word, english_words)
-                    corrected_words.append("/".join(corrections))
+
+                    if corrections == corrected_word:
+                        corrected_words.append(corrected_word)
+                    else:
+                        corrected_words.append("/".join(corrections))
             else:
                 corrected_words.append(corrected_word)
 

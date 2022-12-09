@@ -20,7 +20,16 @@ class Settings:
 
         # dilation of character processed image, before it is passed to neural network
         # required only if the writing is very thin and the characters have been eroded
-        self.dilate = True
+        self.dilate = False
+
+        # minimum length of word for which autocorrected can be applied
+        self.min_word_length_autocorrect = 4
+
+        # maximum ratio of erraneous characters to total characters in a word for which autocorrect can be applied
+        self.max_error_ratio = 0.8
+
+        # maximum number of prospective words to be returned by autocorrect
+        self.max_autocorrected_words = 4
 
 
 settings = Settings()

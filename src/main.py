@@ -12,6 +12,6 @@ if __name__ == "__main__":
     raw_characters = image_segmenter(processed_image, debug=False)
     processed_characters = character_preprocessor(raw_characters)
     recognized_characters, details = character_recognizer(processed_characters, debug=False)
-    final_output = post_processor(recognized_characters, details)
+    final_output = post_processor(recognized_characters, details, number_correction=True, english_correction=True)
 
     print(f"\nFinal output:\n{final_output}")
