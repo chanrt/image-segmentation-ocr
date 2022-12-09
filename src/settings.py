@@ -2,6 +2,12 @@
 
 class Settings:
     def __init__(self):
+        # the range (-theta, theta) across which skew correction is performed (in degrees)
+        self.skew_correction_range = 90
+
+        # the fine-angle tuning used for skew correction (in degrees)
+        self.skew_correction_step = 1
+
         # the ratio of height (wrt line height) of a character if it is to be ignored
         # this is useful for ignoring commas and periods
         self.ignore_character_height_ratio = 0.4
@@ -16,7 +22,7 @@ class Settings:
 
         # skeletonization of character processed image, beofre it is passed to neural network
         # required only if the writing is very thick
-        self.skeletonize = False
+        self.skeletonize = True
 
         # dilation of character processed image, before it is passed to neural network
         # required only if the writing is very thin and the characters have been eroded

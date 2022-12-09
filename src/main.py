@@ -5,13 +5,31 @@ from image_segmentation import image_segmenter
 from post_processing import post_processor
 
 
-if __name__ == "__main__":
+def main(image_name):
     print("Program started")
 
-    processed_image = image_preprocessor('gonzalez_pdf.png')
+    processed_image = image_preprocessor(image_name, skew_correction=True)
+
+    # segment the image into lines, words and characters
+    # debug = True will show all the intermediate segmentation steps
     raw_characters = image_segmenter(processed_image, debug=False)
+
+    # process each character before inputting it to the neural network
     processed_characters = character_preprocessor(raw_characters)
+
+    # recognize each character, and provide details of most probable alphabet and most probable number
+    # if debug = False, then each character, along with it's prediction, will be saved in the debug_outputs folder
     recognized_characters, details = character_recognizer(processed_characters, debug=False)
-    final_output = post_processor(recognized_characters, details, number_correction=True, english_correction=True)
+
+    # run post processing on the recognized characters
+    # number_correction = True will try to replace each number with the most probable character
+    # english_correction = True will try to correct words that are not in the English dictionary
+    final_output = post_processor(recognized_characters, details, number_correction=True, english_correction=False)
 
     print(f"\nFinal output:\n{final_output}")
+
+    return final_output
+
+
+if __name__ == '__main__':
+    main('para_text_rotated.png')
