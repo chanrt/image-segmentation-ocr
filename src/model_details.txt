@@ -1,0 +1,185 @@
+=================================================================
+ann_model_printedchar:
+
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #
+=================================================================
+ dense (Dense)               (None, 512)               401920
+
+ dense_1 (Dense)             (None, 256)               131328
+
+ dense_2 (Dense)             (None, 128)               32896
+
+ dense_3 (Dense)             (None, 62)                7998
+
+=================================================================
+Total params: 574,142
+Trainable params: 574,142
+Non-trainable params: 0
+_________________________________________________________________
+
+model.compile(loss=SparseCategoricalCrossentropy(), optimizer=Adam(learning_rate=0.001), jit_compile=True, metrics=['accuracy'])
+model.fit(train_data, train_labels, epochs=10, batch_size=64, shuffle=True)
+
+Epoch 1/10
+788/788 [==============================] - 7s 8ms/step - loss: 1.0007 - accuracy: 0.7236   
+Epoch 2/10
+788/788 [==============================] - 6s 7ms/step - loss: 0.5449 - accuracy: 0.8225
+Epoch 3/10
+788/788 [==============================] - 5s 7ms/step - loss: 0.4292 - accuracy: 0.8499
+Epoch 4/10
+788/788 [==============================] - 5s 7ms/step - loss: 0.3601 - accuracy: 0.8678
+Epoch 5/10
+788/788 [==============================] - 5s 7ms/step - loss: 0.3128 - accuracy: 0.8818
+Epoch 6/10
+788/788 [==============================] - 5s 7ms/step - loss: 0.2782 - accuracy: 0.8911
+Epoch 7/10
+788/788 [==============================] - 5s 7ms/step - loss: 0.2568 - accuracy: 0.8981
+Epoch 8/10
+788/788 [==============================] - 5s 7ms/step - loss: 0.2377 - accuracy: 0.9065
+Epoch 9/10
+788/788 [==============================] - 6s 7ms/step - loss: 0.2200 - accuracy: 0.9102
+Epoch 10/10
+788/788 [==============================] - 7s 8ms/step - loss: 0.2116 - accuracy: 0.9138
+Evaluation on test set:
+394/394 [==============================] - 2s 3ms/step - loss: 0.3479 - accuracy: 0.8767
+
+=================================================================
+=================================================================
+
+ann_model_handwritten
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #
+=================================================================
+ dense (Dense)               (None, 512)               401920    
+
+ dense_1 (Dense)             (None, 256)               131328
+
+ dense_2 (Dense)             (None, 128)               32896
+
+ dense_3 (Dense)             (None, 62)                7998
+
+=================================================================
+Total params: 574,142
+Trainable params: 574,142
+Non-trainable params: 0
+_________________________________________________________________
+
+model.compile(loss=SparseCategoricalCrossentropy(), optimizer=Adam(learning_rate=0.001), jit_compile=True, metrics=['accuracy'])
+model.fit(train_data, train_labels, epochs=5, batch_size=64, shuffle=True)
+
+Epoch 1/5
+8725/8725 [==============================] - 70s 7ms/step - loss: 0.6067 - accuracy: 0.8001     
+Epoch 2/5
+8725/8725 [==============================] - 60s 7ms/step - loss: 0.4617 - accuracy: 0.8371
+Epoch 3/5
+8725/8725 [==============================] - 60s 7ms/step - loss: 0.4320 - accuracy: 0.8451
+Epoch 4/5
+8725/8725 [==============================] - 59s 7ms/step - loss: 0.4146 - accuracy: 0.8500
+Epoch 5/5
+8725/8725 [==============================] - 59s 7ms/step - loss: 0.4024 - accuracy: 0.8534
+Evaluation on test set:
+4363/4363 [==============================] - 12s 3ms/step - loss: 0.4498 - accuracy: 0.8440
+
+=================================================================
+=================================================================
+cnn_model_printedchar
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #
+=================================================================
+ conv2d (Conv2D)             (None, 28, 28, 32)        320
+
+ conv2d_1 (Conv2D)           (None, 28, 28, 64)        18496
+
+ conv2d_2 (Conv2D)           (None, 28, 28, 128)       73856
+
+ max_pooling2d (MaxPooling2D  (None, 14, 14, 128)      0
+ )
+
+ flatten (Flatten)           (None, 25088)             0
+
+ dense (Dense)               (None, 100)               2508900
+
+ dense_1 (Dense)             (None, 62)                6262
+
+=================================================================
+Total params: 2,607,834
+Trainable params: 2,607,834
+Non-trainable params: 0
+_________________________________________________________________
+
+model.compile(loss=SparseCategoricalCrossentropy(), optimizer=Adam(learning_rate=0.003), jit_compile=True, metrics=['accuracy'])
+model.fit(train_data, train_labels, epochs=10, batch_size=128, shuffle=True)
+
+Epoch 1/10
+394/394 [==============================] - 153s 385ms/step - loss: 0.8129 - accuracy: 0.7690
+Epoch 2/10
+394/394 [==============================] - 151s 384ms/step - loss: 0.3532 - accuracy: 0.8703
+Epoch 3/10
+394/394 [==============================] - 155s 393ms/step - loss: 0.2616 - accuracy: 0.8978
+Epoch 4/10
+394/394 [==============================] - 170s 431ms/step - loss: 0.2145 - accuracy: 0.9148
+Epoch 5/10
+394/394 [==============================] - 163s 415ms/step - loss: 0.1896 - accuracy: 0.9240
+Epoch 6/10
+394/394 [==============================] - 151s 383ms/step - loss: 0.1714 - accuracy: 0.9313
+Epoch 7/10
+394/394 [==============================] - 152s 385ms/step - loss: 0.1585 - accuracy: 0.9355
+Epoch 8/10
+394/394 [==============================] - 155s 393ms/step - loss: 0.1543 - accuracy: 0.9385
+Epoch 9/10
+394/394 [==============================] - 157s 399ms/step - loss: 0.1425 - accuracy: 0.9420
+Epoch 10/10
+394/394 [==============================] - 157s 397ms/step - loss: 0.1311 - accuracy: 0.9455
+
+Evaluation on test set:
+394/394 [==============================] - 7s 17ms/step - loss: 0.3047 - accuracy: 0.9018
+
+
+=================================================================
+=================================================================
+cnn_model_handwritten
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #
+=================================================================
+ conv2d (Conv2D)             (None, 28, 28, 32)        320
+
+ conv2d_1 (Conv2D)           (None, 28, 28, 64)        18496
+
+ conv2d_2 (Conv2D)           (None, 28, 28, 128)       73856
+
+ max_pooling2d (MaxPooling2D  (None, 14, 14, 128)      0
+ )
+
+ flatten (Flatten)           (None, 25088)             0
+
+ dense (Dense)               (None, 100)               2508900
+
+ dense_1 (Dense)             (None, 62)                6262
+
+=================================================================
+Total params: 2,607,834
+Trainable params: 2,607,834
+Non-trainable params: 0
+_________________________________________________________________
+
+model.compile(loss=SparseCategoricalCrossentropy(), optimizer=Adam(learning_rate=0.003), jit_compile=True, metrics=['accuracy'])
+model.fit(train_data, train_labels, epochs=5, batch_size=256, shuffle=True)
+
+Epoch 1/5
+2182/2182 [==============================] - 1758s 805ms/step - loss: 0.5226 - accuracy: 0.8264
+Epoch 2/5
+2182/2182 [==============================] - 1791s 821ms/step - loss: 0.3851 - accuracy: 0.8598
+Epoch 3/5
+2182/2182 [==============================] - 1821s 834ms/step - loss: 0.3558 - accuracy: 0.8674
+Epoch 4/5
+2182/2182 [==============================] - 1888s 865ms/step - loss: 0.3337 - accuracy: 0.8733
+Epoch 5/5
+2182/2182 [==============================] - 1923s 881ms/step - loss: 0.3134 - accuracy: 0.8797
+
+Evaluation on test set:
+4363/4363 [==============================] - 79s 18ms/step - loss: 0.3952 - accuracy: 0.8610

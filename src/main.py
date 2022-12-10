@@ -12,7 +12,7 @@ def main(image_name):
     # skew_correction = True will try to correct the skew of the image
     # denoising = True will denoise the image using non-local means (time consuming)
     # debug = True will show the result at intermediate steps
-    processed_image = image_preprocessor(image_name, skew_correction=False, denoising=False, debug=False)
+    processed_image = image_preprocessor(image_name, skew_correction=True, denoising=False, debug=False)
 
     # segment the image into lines, words and characters
     # debug = True will show all the intermediate segmentation steps
@@ -30,7 +30,7 @@ def main(image_name):
     # run post processing on the recognized characters
     # number_correction = True will try to replace each number with the most probable character
     # english_correction = True will try to correct words that are not in the English dictionary
-    final_output = post_processor(recognized_characters, details, number_correction=True, english_correction=False, debug=True)
+    final_output = post_processor(recognized_characters, details, number_correction=True, english_correction=False, debug=False)
 
     print(f"\nFinal output:\n{final_output}")
 
@@ -38,4 +38,4 @@ def main(image_name):
 
 
 if __name__ == '__main__':
-    main('para_text.png')
+    main('gonzalez_pdf.png')
