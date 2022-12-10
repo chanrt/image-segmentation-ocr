@@ -19,7 +19,7 @@ def get_rotated_image_variance(data):
     return var(horizontal_profile)
 
 
-def image_preprocessor(image_name, skew_correction=False, debug=False):
+def image_preprocessor(image_name, skew_correction=False, denoising=False, debug=False):
     # load image
     folder_path = path.dirname(__file__)
     original_image = imread(path.join(folder_path, 'inputs', image_name))
@@ -33,8 +33,8 @@ def image_preprocessor(image_name, skew_correction=False, debug=False):
         plt.show()
 
     # thresholding
-    threshold = threshold_local(image, settings.threshold_block_size, offset=settings.threshold_offset)
-    # threshold = threshold_otsu(image)
+    # threshold = threshold_local(image, settings.threshold_block_size, offset=settings.threshold_offset)
+    threshold = threshold_otsu(image)
     image = image < threshold
 
     if debug:
@@ -43,16 +43,16 @@ def image_preprocessor(image_name, skew_correction=False, debug=False):
         plt.axis('off')
         plt.show()
     
-    # noise removal
-    # print("\nDenoising image ...")
-    # sigma = mean(estimate_sigma(image, channel_axis=-1))
-    # image = denoise_nl_means(original_image, h = 0.8 * sigma, fast_mode=True)
+    if denoising:
+        print("\nDenoising image ...")
+        sigma = mean(estimate_sigma(image, channel_axis=-1))
+        image = denoise_nl_means(original_image, h = 0.8 * sigma, fast_mode=True)
 
-    # if debug:
-    #     plt.title("Denoised image")
-    #     plt.imshow(image, cmap='gray')
-    #     plt.axis('off')
-    #     plt.show()
+        if debug:
+            plt.title("Denoised image")
+            plt.imshow(image, cmap='gray')
+            plt.axis('off')
+            plt.show()
 
     # skew correction
     if skew_correction:
@@ -67,6 +67,12 @@ def image_preprocessor(image_name, skew_correction=False, debug=False):
 
         best_angle = angles[variances.index(max(variances))]
         image = rotate(image, best_angle, mode='constant', cval=0)
+
+        if debug:
+            plt.title("Skew corrected image")
+            plt.imshow(image, cmap='gray')
+            plt.axis('off')
+            plt.show()
     
     return image
 

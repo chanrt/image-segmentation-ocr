@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 from numpy import c_, r_, zeros
 from skimage.morphology import dilation, skeletonize
 from skimage.transform import resize
@@ -16,7 +17,7 @@ def pad_character(character, padding):
     return character
 
 
-def character_preprocessor(characters):
+def character_preprocessor(characters, debug=True):
     """ Takes binarized images containing single characters and processes them for input to neural network """
 
     processed_characters = []
@@ -26,6 +27,7 @@ def character_preprocessor(characters):
         if str(character) == ' ' or str(character) == '\n':
             processed_characters.append(character)
         else:
+            original_character = character.copy()
             num_rows, num_cols = character.shape
 
             # make sure image is square
@@ -62,5 +64,19 @@ def character_preprocessor(characters):
                 character = skeletonize(character)
             
             processed_characters.append(character)
+
+            if debug:
+                plt.figure(figsize=(10, 5))
+                plt.subplot(1, 2, 1)
+                plt.title("Original character")
+                plt.imshow(original_character, cmap='gray')
+                plt.axis('off')
+
+                plt.subplot(1, 2, 2)
+                plt.title("Processed character")
+                plt.imshow(character, cmap='gray')
+                plt.axis('off')
+
+                plt.show()
 
     return processed_characters
