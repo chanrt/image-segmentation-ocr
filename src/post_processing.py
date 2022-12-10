@@ -52,7 +52,7 @@ def apply_spelling_correction(word, english_words):
         return word
 
 
-def post_processor(string, predictions, number_correction=True, english_correction=False):
+def post_processor(string, predictions, number_correction=True, english_correction=False, debug=False):
     """ Accepts a string and corrects common mistakes """
     folder_path = path.dirname(__file__)
     english_words = open(path.join(folder_path, 'data', 'english_words.txt'), 'r').read().split('\n')
@@ -61,6 +61,10 @@ def post_processor(string, predictions, number_correction=True, english_correcti
 
     words = []
     word = ""
+
+    if debug:
+        print("\nText received for post-processing:")
+        print(string)
 
     # break string into words
     for i in range(length):
@@ -106,5 +110,9 @@ def post_processor(string, predictions, number_correction=True, english_correcti
             index += len(word)
 
     string = "".join(corrected_words)
+
+    if debug:
+        print("\nText after post-processing:")
+        print(string)
 
     return string.lower()

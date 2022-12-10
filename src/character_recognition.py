@@ -62,11 +62,23 @@ def get_most_probable_chars(predictions, mapping):
     return most_prob_alpha, most_prob_num, alpha_prob, num_prob
 
 
-def character_recognizer(characters, debug=False):
+def character_recognizer(characters, use_cnn=True, printed_chars=True, debug=False):
     """ Takes binary images containing single characters and passes it to the neural network for recognition """
     folder_path = os.path.dirname(__file__)
-    model = load_model(os.path.join(folder_path, 'model'))
     mapping = load(open(os.path.join(folder_path, 'data', 'mapping.pkl'), 'rb'))
+
+    model_name = ""
+    if use_cnn:
+        model_name += "cnn_model"
+    else:
+        model_name += "ann_model"
+
+    if printed_chars:
+        model_name += "_printedchar"
+    else:
+        model_name += "_handwritten"
+
+    model = load_model(os.path.join(folder_path, model_name))
     
     special_chars = []
     actual_characters = []
@@ -76,7 +88,10 @@ def character_recognizer(characters, debug=False):
         if isinstance(character, str):
             special_chars.append({'index': i, 'character': character})
         else:
-            actual_characters.append(transpose(character))
+            if use_cnn:
+                actual_characters.append(character)
+            else:
+                actual_characters.append(character.reshape(784))
 
     # final output
     predictions = [0 for _ in characters]
