@@ -20,6 +20,11 @@ class Settings:
         # to be considered a tittle
         self.min_tittle_pixels = 5
 
+        # if connectivtiy is 1, then only the 4 Von Neumann neighbours are considered as 'neighbours' of a pixel
+        # if connectivity is 2, then all 7 adjacent pixels are considered as 'neighbours'
+        # for eroded images, keep connectivity = 2 to prevent the connected components from being broken
+        self.connectivity = 2
+
         # the amount of padding (in pixels) inserted around the square image of each character
         # before image is passed to neural network for recongition
         self.padding = 4
@@ -30,7 +35,7 @@ class Settings:
 
         # dilation of character processed image, before it is passed to neural network
         # required only if the writing is very thin and the characters have been eroded
-        self.dilate = True
+        self.dilate = False
 
         # minimum length of word for which autocorrected can be applied
         self.min_word_length_autocorrect = 3

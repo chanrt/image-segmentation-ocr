@@ -34,4 +34,4 @@ def evaluator(image_name):
 
 
 if __name__ == '__main__':
-    evaluator('polya_description.png')
+    evaluator('ingredients.png')

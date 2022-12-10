@@ -56,7 +56,7 @@ def segment_characters(image, debug=False):
     if top_line == bottom_line:
         return []
 
-    labelled_image = label(image, background=0)
+    labelled_image = label(image, background=0, connectivity=1)
 
     num_features = labelled_image.max()
     segments = []
