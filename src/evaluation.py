@@ -5,11 +5,15 @@ from main import main
 
 
 def evaluator(image_name):
+    """ Calculate the Levenshtein distance and the error of the program output """
+
     folder_path = os.path.dirname(__file__)
     program_output = main(image_name).replace('\n', '')
 
     file_name = image_name.split('.')[0] + '.txt'
     
+    # make sure that the expected output corresponding to the image name exists
+    # in the expected_outputs folder. Otherwise this program won't work
     expected_output_file = os.path.join(folder_path, 'expected_outputs', file_name)
     expected_output = open(expected_output_file, 'r').read().replace('\n', ' ')
 
@@ -30,4 +34,4 @@ def evaluator(image_name):
 
 
 if __name__ == '__main__':
-    evaluator('para_text_rotated.png')
+    evaluator('polya_description.png')

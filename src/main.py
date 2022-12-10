@@ -12,7 +12,7 @@ def main(image_name):
     # skew_correction = True will try to correct the skew of the image
     # denoising = True will denoise the image using non-local means (time consuming)
     # debug = True will show the result at intermediate steps
-    processed_image = image_preprocessor(image_name, skew_correction=True, denoising=False, debug=False)
+    processed_image = image_preprocessor(image_name, skew_correction=False, denoising=False, debug=True)
 
     # segment the image into lines, words and characters
     # debug = True will show all the intermediate segmentation steps
@@ -38,4 +38,4 @@ def main(image_name):
 
 
 if __name__ == '__main__':
-    main('gonzalez_pdf.png')
+    main('polya_description_inverted.png')

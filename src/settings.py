@@ -30,7 +30,7 @@ class Settings:
 
         # dilation of character processed image, before it is passed to neural network
         # required only if the writing is very thin and the characters have been eroded
-        self.dilate = False
+        self.dilate = True
 
         # minimum length of word for which autocorrected can be applied
         self.min_word_length_autocorrect = 3

@@ -3,7 +3,7 @@ from multiprocessing import cpu_count, Pool
 from numpy import arange, mean, pi, sum, var, zeros
 from os import path
 from skimage.io import imread
-from skimage.color import rgb2gray
+from skimage.color import rgb2gray, rgba2rgb
 from skimage.filters import threshold_local, threshold_otsu
 from skimage.restoration import denoise_nl_means, estimate_sigma
 from skimage.transform import rotate
@@ -23,8 +23,11 @@ def image_preprocessor(image_name, skew_correction=False, denoising=False, debug
     # load image
     folder_path = path.dirname(__file__)
     original_image = imread(path.join(folder_path, 'inputs', image_name))
+    num_rows, num_cols, num_channels = original_image.shape
+
+    if num_channels == 4:
+        original_image = rgba2rgb(original_image)
     image = rgb2gray(original_image)
-    num_rows, num_cols = image.shape
 
     if debug:
         plt.title("Grayscale image")
@@ -33,9 +36,18 @@ def image_preprocessor(image_name, skew_correction=False, denoising=False, debug
         plt.show()
 
     # thresholding
-    # threshold = threshold_local(image, settings.threshold_block_size, offset=settings.threshold_offset)
-    threshold = threshold_otsu(image)
-    image = image < threshold
+    otsu_threshold = threshold_otsu(image)
+    image_otsu_1 = image > otsu_threshold
+    image_otsu_2 = image < otsu_threshold
+
+    if sum(image_otsu_1) > sum(image_otsu_2):
+        threshold = threshold_local(image, settings.threshold_block_size, offset=settings.threshold_offset)
+        image = image < threshold
+    else:
+        print("Dark image detected. Inverting image and recalculating local thresholds ...")
+        image = 1 - image
+        threshold = threshold_local(image, settings.threshold_block_size, offset=settings.threshold_offset)
+        image = image < threshold
 
     if debug:
         plt.title("Thresholded image")
