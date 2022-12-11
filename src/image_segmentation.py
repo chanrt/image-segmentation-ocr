@@ -1,11 +1,8 @@
-from matplotlib import pyplot as plt
 from tqdm import tqdm
-import os
 
 from segment_characters import segment_characters
 from segment_lines import segment_lines
 from segment_words import segment_words
-from settings import settings
 
 
 def image_segmenter(image, vertical_lines=False):
@@ -24,8 +21,14 @@ def image_segmenter(image, vertical_lines=False):
         for word in words:
             # divide each word into characters
             characters.extend(segment_characters(word))
+
+            # add space after every word
             characters.append(' ')
 
+        # add newline after every line
         characters.append('\n')
 
+    # the characters returned here, are connected components of alphanumeric characters isolated from the image (2D numpy arrays
+    # however, newlines and spaces are also incorporated into the list, in the form of strings
+    # the downstream functions will be able to handle this
     return characters

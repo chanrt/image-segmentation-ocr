@@ -3,4 +3,9 @@ However, if you wanna execute trainer.py or load_data.py, then please download t
 and place them in this (data) folder:
 
 1) handwritten_dataset.pkl (~550 MB): https://indianinstituteofscience-my.sharepoint.com/:u:/g/personal/chandanrt_iisc_ac_in/EaUa37ifvlpLlJv01iw9K1gB__t3h5qthJeodg4lF3RxGw?e=mPSpBf
+
+Cohen, G., Afshar, S., Tapson, J., & van Schaik, A. (2017). EMNIST: an extension of MNIST to handwritten letters
+
 2) printedchar_dataset.pkl (~200 MB): https://indianinstituteofscience-my.sharepoint.com/:u:/g/personal/chandanrt_iisc_ac_in/EfKPg_oMfXlAhHo_W_1bN8ABPs9_OUfbon0XSiGKf7BrVA?e=v2Vemt
+
+T. E. de Campos, B. R. Babu and M. Varma (2009). Character recognition in natural images

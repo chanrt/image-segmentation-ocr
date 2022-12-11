@@ -21,7 +21,13 @@ class Settings:
         # the fine-angle tuning used for skew correction (in degrees)
         self.skew_correction_step = 1
 
-        # the minimum ratio of pixels in a row (with respect to the maximum) for it to be considered a line
+        # the minimum ratio of pixels in a row (with respect to total number of pixels) for it to be considered a horizontal line
+        self.horizontal_line_threshold = 0.4
+
+        # rows around each horizontal line to be remove
+        self.line_surround_remove = 2
+
+        # the minimum ratio of pixels in a row (with respect to the maximum) for it to be considered the starting of a line of text
         self.line_segmentation_threshold = 0.1
 
         # minimum spacing between two lines (in pixels)

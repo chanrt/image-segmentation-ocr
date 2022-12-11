@@ -18,8 +18,24 @@ def get_character(label, mapping):
 
 def interactive():
     """ Allows the user to draw a character on a canvas and have it recognized by the neural network """
+    use_cnn = True
+    handwritten = True
+
+    model_name = ""
+    if use_cnn:
+        model_name += "cnn_model"
+    else:
+        model_name += "ann_model"
+
+    if not handwritten:
+        model_name += "_printedchar"
+    else:
+        model_name += "_handwritten"
+
+    print("Loading model ...")
+
     folder_path = os.path.dirname(__file__)
-    model = load_model(os.path.join(folder_path, 'model'))
+    model = load_model(os.path.join(folder_path, model_name))
     mapping = load(open(os.path.join(folder_path, 'data', 'mapping.pkl'), 'rb'))
 
     pg.init()
@@ -57,7 +73,10 @@ def interactive():
             if 0 <= x < 28 and 0 <= y < 28:
                 grid[y][x] = 1
 
-            nn_input = transpose(dilation(array(grid))).reshape(-1, 28, 28, 1)
+            if use_cnn:
+                nn_input = array(grid).reshape(-1, 28, 28, 1)
+            else:
+                nn_input = array(grid).reshape(-1, 784)
             prediction = model.predict(nn_input, verbose=0)
             character = get_character(prediction.argmax(), mapping)
             text = big_font.render(character, True, (255, 255, 255)) 

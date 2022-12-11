@@ -34,4 +34,4 @@ def evaluator(image_name):
 
 
 if __name__ == '__main__':
-    evaluator('lorem_ipsum_written.png')
+    evaluator('lorem_ipsum.png')

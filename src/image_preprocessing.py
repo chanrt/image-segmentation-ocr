@@ -19,7 +19,7 @@ def get_rotated_image_variance(data):
     return var(horizontal_profile)
 
 
-def image_preprocessor(image_name, skew_correction=False, denoising=False):
+def image_preprocessor(image_name, skew_correction=False, denoising=False, horizontal_lines=False):
     # load image
     folder_path = path.dirname(__file__)
     original_image = imread(path.join(folder_path, 'inputs', image_name))
@@ -82,6 +82,31 @@ def image_preprocessor(image_name, skew_correction=False, denoising=False):
 
         if settings.debug_preprocessor:
             plt.title("Skew corrected image")
+            plt.imshow(image, cmap='gray')
+            plt.axis('off')
+            plt.show()
+
+    if horizontal_lines:
+        horizontal_histogram = zeros(num_rows)
+        for row in range(num_rows):
+            horizontal_histogram[row] = sum(image[row, :])
+
+        horizontal_line_locations = []
+        for row in range(num_rows):
+            ratio = horizontal_histogram[row] / num_cols
+            if ratio > settings.horizontal_line_threshold:
+                horizontal_line_locations.append(row)
+
+        for row in horizontal_line_locations:
+            image[row, :] = 0
+            
+            for surround_row in range(row - settings.line_surround_remove, row + settings.line_surround_remove + 1):
+                if surround_row < 0 or surround_row >= num_rows:
+                    continue
+                image[surround_row, :] = 0
+
+        if settings.debug_preprocessor:
+            plt.title("Horizontal lines removed")
             plt.imshow(image, cmap='gray')
             plt.axis('off')
             plt.show()
