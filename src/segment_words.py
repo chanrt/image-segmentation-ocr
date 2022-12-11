@@ -57,6 +57,9 @@ def segment_words(image, debug=False):
     # cluster spaces into two groups, one corresponding to word space, and other to character space
     _, centroids = cluster(spaces, 2)
 
+    if len(centroids) == 1:
+        return []
+
     words = []
     word_start, word_end = -1, -1
     

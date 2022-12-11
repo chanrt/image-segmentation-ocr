@@ -118,11 +118,11 @@ def character_recognizer(characters, use_cnn=True, printed_chars=True, debug=Fal
                 most_probable_characters.append(most_prob_num)
 
     if debug:
-        print("Generating debug data ...")
+        print("\nGenerating debug data on character recognition ...")
         num = 0
         for actual_character in tqdm(actual_characters):
             plt.title(f"Prediction: {most_probable_characters[num]}")
-            plt.imshow(transpose(actual_character))
+            plt.imshow(actual_character)
             plt.savefig(os.path.join(folder_path, 'debug_outputs', f'character_{num}.png'))
             num += 1
 

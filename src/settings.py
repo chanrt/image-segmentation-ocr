@@ -12,9 +12,15 @@ class Settings:
         # the fine-angle tuning used for skew correction (in degrees)
         self.skew_correction_step = 1
 
+        # the minimum ratio of pixels in a row (with respect to the maximum) for it to be considered a line
+        self.line_segmentation_threshold = 0.1
+
+        # minimum spacing between two lines (in pixels)
+        self.line_segmentation_min_height = 5
+
         # the ratio of height (wrt line height) of a character if it is to be ignored
         # this is useful for ignoring commas and periods
-        self.ignore_character_height_ratio = 0.4
+        self.ignore_character_height_ratio = 0.2
 
         # the minimum number of pixels a feature above a short connected component must have
         # to be considered a tittle
@@ -35,7 +41,11 @@ class Settings:
 
         # dilation of character processed image, before it is passed to neural network
         # required only if the writing is very thin and the characters have been eroded
-        self.dilate = False
+        self.dilate = True
+
+        # in a word with both letters and numbers
+        # the ratio of num_numbers / num_total below which number correction will be applied
+        self.max_number_ratio = 0.5
 
         # minimum length of word for which autocorrected can be applied
         self.min_word_length_autocorrect = 3

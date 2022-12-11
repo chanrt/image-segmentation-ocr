@@ -89,7 +89,12 @@ def post_processor(string, predictions, number_correction=True, english_correcti
         else:
             num_letters, num_numbers = get_stats(word)
 
-            if number_correction and (num_numbers > 0 and num_letters > 0):
+            if num_letters + num_numbers == 0:
+                continue
+
+            ratio = num_numbers / (num_letters + num_numbers)
+
+            if number_correction and num_numbers > 0 and ratio < settings.max_number_ratio:
                 corrected_word = apply_number_correction(word, predictions[index: index + len(word)])
             else:
                 corrected_word = word[:]
