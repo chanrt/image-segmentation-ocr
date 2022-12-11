@@ -1,0 +1,10 @@
+kmeans1d
+levenshtein
+matplotlib
+multiprocessing
+numba
+numpy
+pickle
+scikit-image
+tensorflow
+tqdm

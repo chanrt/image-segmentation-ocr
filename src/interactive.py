@@ -74,9 +74,9 @@ def interactive():
                 grid[y][x] = 1
 
             if use_cnn:
-                nn_input = array(grid).reshape(-1, 28, 28, 1)
+                nn_input = dilation(array(grid)).reshape(-1, 28, 28, 1)
             else:
-                nn_input = array(grid).reshape(-1, 784)
+                nn_input = dilation(array(grid)).reshape(-1, 784)
             prediction = model.predict(nn_input, verbose=0)
             character = get_character(prediction.argmax(), mapping)
             text = big_font.render(character, True, (255, 255, 255)) 
