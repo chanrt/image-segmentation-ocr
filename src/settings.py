@@ -2,6 +2,15 @@
 
 class Settings:
     def __init__(self):
+        # debug modes
+        self.debug_preprocessor = False
+        self.debug_line_segmenter = False
+        self.debug_word_segmenter = False
+        self.debug_character_segmenter = False
+        self.debug_character_preprocessor = False
+        self.debug_character_recognizor = False
+        self.debug_post_processor = False
+
         # adaptive thresholding parameters
         self.threshold_block_size = 51
         self.threshold_offset = 0.1
@@ -20,7 +29,7 @@ class Settings:
 
         # the ratio of height (wrt line height) of a character if it is to be ignored
         # this is useful for ignoring commas and periods
-        self.ignore_character_height_ratio = 0.2
+        self.ignore_character_height_ratio = 0.4
 
         # the minimum number of pixels a feature above a short connected component must have
         # to be considered a tittle

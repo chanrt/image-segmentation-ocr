@@ -5,37 +5,25 @@ import os
 from segment_characters import segment_characters
 from segment_lines import segment_lines
 from segment_words import segment_words
+from settings import settings
 
 
-def image_segmenter(image, vertical_lines=False, debug_line=False, debug_word=False, debug_char=False):
+def image_segmenter(image, vertical_lines=False):
     """ Takes a processed binarized image and cascades it into an output string """
     characters = []
-
-    if debug_char:
-        folder_path = os.path.dirname(__file__)
-        debug_folder_path = os.path.join(folder_path, 'debug_outputs')
-
-        # check if debug folder exists
-        if not os.path.exists(debug_folder_path):
-            # create debug folder
-            os.mkdir(debug_folder_path)
-        else:
-            # empty debug folder contents
-            for file in os.listdir(debug_folder_path):
-                os.remove(os.path.join(debug_folder_path, file))
 
     print("\nSegmenting image ...")
 
     # divide image into lines
-    lines = segment_lines(image, vertical_lines=vertical_lines, debug=debug_line)
+    lines = segment_lines(image, vertical_lines=vertical_lines)
 
     for line in tqdm(lines):
         # divide each line into words
-        words = segment_words(line, debug=debug_word)
+        words = segment_words(line)
 
         for word in words:
             # divide each word into characters
-            characters.extend(segment_characters(word, debug=debug_char))
+            characters.extend(segment_characters(word))
             characters.append(' ')
 
         characters.append('\n')

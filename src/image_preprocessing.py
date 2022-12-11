@@ -19,7 +19,7 @@ def get_rotated_image_variance(data):
     return var(horizontal_profile)
 
 
-def image_preprocessor(image_name, skew_correction=False, denoising=False, debug=False):
+def image_preprocessor(image_name, skew_correction=False, denoising=False):
     # load image
     folder_path = path.dirname(__file__)
     original_image = imread(path.join(folder_path, 'inputs', image_name))
@@ -29,7 +29,7 @@ def image_preprocessor(image_name, skew_correction=False, denoising=False, debug
         original_image = rgba2rgb(original_image)
     image = rgb2gray(original_image)
 
-    if debug:
+    if settings.debug_preprocessor:
         plt.title("Grayscale image")
         plt.imshow(image, cmap='gray')
         plt.axis('off')
@@ -49,7 +49,7 @@ def image_preprocessor(image_name, skew_correction=False, denoising=False, debug
         threshold = threshold_local(image, settings.threshold_block_size, offset=settings.threshold_offset)
         image = image < threshold
 
-    if debug:
+    if settings.debug_preprocessor:
         plt.title("Thresholded image")
         plt.imshow(image, cmap='gray')
         plt.axis('off')
@@ -60,7 +60,7 @@ def image_preprocessor(image_name, skew_correction=False, denoising=False, debug
         sigma = mean(estimate_sigma(image, channel_axis=-1))
         image = denoise_nl_means(original_image, h = 0.8 * sigma, fast_mode=True)
 
-        if debug:
+        if settings.debug_preprocessor:
             plt.title("Denoised image")
             plt.imshow(image, cmap='gray')
             plt.axis('off')
@@ -80,7 +80,7 @@ def image_preprocessor(image_name, skew_correction=False, denoising=False, debug
         best_angle = angles[variances.index(max(variances))]
         image = rotate(image, best_angle, mode='constant', cval=0)
 
-        if debug:
+        if settings.debug_preprocessor:
             plt.title("Skew corrected image")
             plt.imshow(image, cmap='gray')
             plt.axis('off')

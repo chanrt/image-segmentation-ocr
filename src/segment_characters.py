@@ -43,7 +43,7 @@ def get_bounding_rect(labelled_image, label):
     return top_row, bottom_row, left_col, right_col
 
 
-def segment_characters(image, debug=False):
+def segment_characters(image):
     """ Takes a binarized image of a word and segments it into characters """
     num_rows, _ = image.shape
     vertical_histogram = zeros(num_rows, dtype=int)
@@ -94,7 +94,7 @@ def segment_characters(image, debug=False):
     # extract images
     segments = [segment['image'] for segment in segments]
 
-    if debug:
+    if settings.debug_character_segmenter:
         for i, segment in enumerate(segments):
             plt.subplot(1, len(segments), i + 1)
             plt.imshow(segment, cmap='gray')

@@ -2,6 +2,8 @@ from kmeans1d import cluster
 from matplotlib import pyplot as plt
 from numpy import zeros
 
+from settings import settings
+
 
 def get_first(histogram):
     for i in range(len(histogram)):
@@ -26,7 +28,7 @@ def get_space_around(histogram, i):
             return space
 
 
-def segment_words(image, debug=False):
+def segment_words(image):
     """ Takes a binarized image of a line and segments it into words """
     _, num_cols = image.shape
     vertical_histogram = zeros(num_cols, dtype=int)
@@ -88,7 +90,7 @@ def segment_words(image, debug=False):
     if word_start != -1:
         words.append(image[:, word_start:end + 1])
 
-    if debug:
+    if settings.debug_word_segmenter:
         for i, word in enumerate(words):
             plt.subplot(1, len(words), i + 1)
             plt.imshow(word, cmap='gray')

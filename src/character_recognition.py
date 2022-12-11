@@ -118,6 +118,18 @@ def character_recognizer(characters, use_cnn=True, printed_chars=True, debug=Fal
                 most_probable_characters.append(most_prob_num)
 
     if debug:
+        folder_path = os.path.dirname(__file__)
+        debug_folder_path = os.path.join(folder_path, 'debug_outputs')
+
+        # check if debug folder exists
+        if not os.path.exists(debug_folder_path):
+            # create debug folder
+            os.mkdir(debug_folder_path)
+        else:
+            # empty debug folder contents
+            for file in os.listdir(debug_folder_path):
+                os.remove(os.path.join(debug_folder_path, file))
+
         print("\nGenerating debug data on character recognition ...")
         num = 0
         for actual_character in tqdm(actual_characters):

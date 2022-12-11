@@ -1,12 +1,10 @@
 from matplotlib import pyplot as plt
 from numpy import zeros
-from scipy.signal import argrelmin
-from os import path
 
 from settings import settings
 
 
-def segment_lines(image, vertical_lines=False, debug=False):
+def segment_lines(image, vertical_lines=False):
     """ Takes a binarized image containing a paragraph and segments it into lines  """
     num_rows, num_cols = image.shape
     horizontal_histogram = zeros(num_rows, dtype=int)
@@ -90,7 +88,7 @@ def segment_lines(image, vertical_lines=False, debug=False):
             minimas_considered.append(line_separation_index)
             line_start = line_separation_index + 1
 
-    if debug:
+    if settings.debug_line_segmenter:
         for i, line in enumerate(lines):
             plt.subplot(len(lines), 1, i + 1)
             plt.imshow(line, cmap='gray')

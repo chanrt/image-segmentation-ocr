@@ -65,7 +65,7 @@ def character_preprocessor(characters, debug=True):
             
             processed_characters.append(character)
 
-            if debug:
+            if settings.debug_character_preprocessor:
                 plt.figure(figsize=(10, 5))
                 plt.subplot(1, 2, 1)
                 plt.title("Original character")
